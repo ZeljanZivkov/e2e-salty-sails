@@ -1,9 +1,10 @@
-//? User Story 3 - Filter All Leads View
+//* User Story 3 - Filter All Leads View
 /// <reference types="cypress" />
 
 describe('Verify Filtering Functionality on the All Designs Table', () => {
     const validEmail = Cypress.env("email");
     const validPassword = Cypress.env("password"); 
+    const statusFilter = Cypress.env("specificStatusFilter");
 
     beforeEach(() => {
         cy.visit('/app/login', {
@@ -14,7 +15,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
         });
         cy.get('[type="email"]').type(validEmail); 
         cy.get('[type="password"]').type(validPassword); 
-        cy.get('button[type="submit"]').click();
+        cy.get('button[type="submit"]').click().wait(1000);
     });
 
     it('should display lead designs in list view', () => {
@@ -45,81 +46,130 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
         
         cy.get('section', ).eq(1).find('button').click()
         cy.get('.react-select__control').click();
-        cy.get('.react-select__menu').contains('Completed').click();
-        cy.get('table').find('tr').should('have.length.greaterThan', 0);
-        cy.get('table').contains('Completed').should('exist'); 
+        cy.get('.react-select__menu').contains(statusFilter).click();
+        cy.get('button').contains('Apply filters').click().wait(2000);
+        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains('Base Quote Sent').should('exist'); 
     });
 
     it('should reset the status filter', () => {
 
         cy.get('section', ).eq(1).find('button').click()
         cy.get('.react-select__control').click();
-        cy.get('.react-select__menu').contains('Completed').click();
-
-        //? Ovde treba dopuna na primer Apply filter pa onda Clear
+        cy.get('.react-select__menu').contains(statusFilter).click();
+        cy.get('section', ).eq(2).should('be.visible');
+        cy.get('button').contains('Apply filters').click().wait(2000);
+        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains('Base Quote Sent').should('exist');
         cy.get('section', ).eq(1).contains('span', 'Clear all filters').click();
-        
-        cy.get('table').find('tr').should('have.length.greaterThan', 0);
+        cy.get('button').contains('Apply filters').should('be.hidden');
 
-        Cypress.runner.stop();
+        // Cypress.runner.stop();
     });
-            //! ovde si stao
-    it.only('should display a date picker for the Date Range filter', () => {
+
+    it('should display a date picker for the Date Range filter', () => {
         // Step #6: Locate the "Date Range" filter.
         cy.get('section', ).eq(1).find('button').click()
-        // cy.get('.react-select__control').click();
+        cy.get(':nth-child(2) > label')
+            .contains('Start date')
+            .parent()
+            .click();
+        cy.get('.react-calendar').should('be.visible');
 
-
-        //?----------------------------------------------------------------------------------------------------------------
-        // cy.get('#date-range-filter').click(); // Replace with actual date range filter selector
-        // cy.get('.date-picker').should('be.visible'); // Ensure date picker is visible
+        cy.get(':nth-child(3) > label')
+            .contains('End date')
+            .parent()
+            .click();
+        cy.get('.react-calendar').should('be.visible');
+          
     });
 
-    it('should filter designs by a specific date range', () => {
-        // Step #7: Select a specific date range (e.g., "2024-01-01" to "2024-12-31")
-        cy.get('#date-range-start').type('2024-01-01'); // Replace with actual start date input selector
-        cy.get('#date-range-end').type('2024-12-31'); // Replace with actual end date input selector
-        cy.get('#apply-date-range').click(); // Replace with actual apply button selector
-        cy.get('.designs-table').find('tr').should('have.length.greaterThan', 0); // Ensure designs are filtered
+    it('should filter designs by a specific start date ', () => {
+
+        cy.get('section', ).eq(1).find('button').click()
+        cy.get(':nth-child(2) > label')
+            .contains('Start date')
+            .parent()
+            .click();
+        cy.get('.react-calendar').should('be.visible');
+        cy.get('.react-calendar__tile').filter((index, element) => {
+                return element.querySelector('abbr')?.textContent === '6';
+            }).click();
+
+        cy.get('button').contains('Apply filters').click().wait(1000);
+
+        cy.get('table').find('tr').should('have.length.greaterThan', 0); 
     });
 
-    it('should change the date range to a different interval', () => {
-        // Step #8: Change the date range to a different interval
-        cy.get('#date-range-start').clear().type('2024-06-01'); // Replace with actual start date input selector
-        cy.get('#date-range-end').clear().type('2024-06-30'); // Replace with actual end date input selector
-        cy.get('#apply-date-range').click(); // Replace with actual apply button selector
-        cy.get('.designs-table').find('tr').should('have.length.greaterThan', 0); // Ensure designs are filtered
-    });
+    it('should filter designs by a start and end date', () => {
 
-    it('should reset the date range filter', () => {
-        // Step #9: Reset the filter
-        cy.get('#reset-filters').click(); // Replace with actual reset button selector
-        cy.get('.designs-table').find('tr').should('have.length.greaterThan', 0); // Ensure all designs are displayed
-    });
+        cy.get('section', ).eq(1).find('button').click()
+        cy.get(':nth-child(2) > label')
+            .contains('Start date')
+            .parent()
+            .click();
+        cy.get('.react-calendar').should('be.visible');
+        cy.get('.react-calendar__tile').filter((index, element) => {
+                return element.querySelector('abbr')?.textContent === '6';
+            }).click();
 
-    it('should filter designs by a specific status again', () => {
-        // Step #10: Select a specific status (e.g., "Refined Quote Sent")
-        cy.get('#status-filter').select('Refined Quote Sent'); // Replace with actual dropdown selector
-        cy.get('.designs-table').find('tr').should('have.length.greaterThan', 0); // Ensure designs are filtered
-    });
+        cy.get(':nth-child(3) > label')
+            .contains('End date')
+            .parent()
+            .click();
+        cy.get('.react-calendar').should('be.visible');
+        cy.get('.react-calendar__tile').filter((index, element) => {
+                return element.querySelector('abbr')?.textContent === '10';
+            }).click();
 
-    it('should apply a date range with a specific status', () => {
-        // Step #11: Apply a date range (e.g., "2024-01-01" to "2024-06-30").
-        cy.get('#date-range-start').type('2024-01-01'); // Replace with actual start date input selector
-        cy.get('#date-range-end').type('2024-06-30'); // Replace with actual end date input selector
-        cy.get('#apply-date-range').click(); // Replace with actual apply button selector
-        cy.get('.designs-table').find('tr').should('have.length.greaterThan', 0); // Ensure designs are filtered
-    });
+        cy.get('button').contains('Apply filters').click().wait(1000);
 
-    it('should reset the date range filter', () => {
-        // Step #12: Reset one filter (e.g., date range)
-        cy.get('#reset-date-range').click(); // Replace with actual reset button selector for date range
-        cy.get('.designs-table').find('tr').should('have.length.greaterThan', 0); // Ensure designs are filtered by status
+        cy.get('table').find('tr').should('have.length.greaterThan', 0); 
+    });
+    
+    it('should apply a Start date  with a specific status', () => {
+        cy.get('section', ).eq(1).find('button').click()
+        cy.get(':nth-child(2) > label')
+            .contains('Start date')
+            .parent()
+            .click();
+        cy.get('.react-calendar').should('be.visible');
+        cy.get('.react-calendar__tile').filter((index, element) => {
+                return element.querySelector('abbr')?.textContent === '6';
+            }).click();
+
+        cy.get('.react-select__control').click();
+        cy.get('.react-select__menu').contains(statusFilter).click();
+        cy.get('button').contains('Apply filters').click().wait(2000);
+        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains('Base Quote Sent').should('exist'); 
     });
 
     it('should reset all filters', () => {
-        // Step #13: Reset all filters
-        cy.get('#reset-filters').click(); // Replace with actual reset button selector
-        cy.get('.designs-table').find('tr').should('have.length.greaterThan', 0); // Ensure all designs are displayed
+        cy.get('section', ).eq(1).find('button').click()
+        cy.get(':nth-child(2) > label')
+            .contains('Start date')
+            .parent()
+            .click();
+        cy.get('.react-calendar').should('be.visible');
+        cy.get('.react-calendar__tile').filter((index, element) => {
+                return element.querySelector('abbr')?.textContent === '6';
+            }).click();
+
+        cy.get(':nth-child(3) > label')
+            .contains('End date')
+            .parent()
+            .click();
+        cy.get('.react-calendar').should('be.visible');
+        cy.get('.react-calendar__tile').filter((index, element) => {
+                return element.querySelector('abbr')?.textContent === '10';
+            }).click();
+
+        cy.get('.react-select__control').click();
+        cy.get('.react-select__menu').contains(statusFilter).click();
+
+        cy.get('button').contains('Apply filters').click().wait(1000);
+
+        cy.get('table').find('tr').should('have.length.greaterThan', 0); 
+        cy.get('section', ).eq(1).contains('span', 'Clear all filters').click();
+        cy.get('button').contains('Apply filters').should('be.hidden');
     });
+
 });

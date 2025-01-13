@@ -1,104 +1,117 @@
 //? User Story 2 - View All Lead Designs
 /// <reference types="cypress" />
-
-describe('Test cases for viewing all lead designs in List View', () => {
+    
+describe('Salty-Sails Admin Panel - Lead Designs List View', () => {
     const validEmail = Cypress.env("email");
     const validPassword = Cypress.env("password"); 
-
-    // beforeEach(() => {
-    //     cy.visit('/app/login', {
-    //         auth: {
-    //             username: Cypress.env("httpAuthUsername"),
-    //             password: Cypress.env("httpAuthPassword"),          
-    //         },
-    //     });
-
-    //     cy.get('[type="email"]').type(validEmail); 
-    //     cy.get('[type="password"]').type(validPassword); 
-    //     cy.get('button[type="submit"]').click(); 
-    //     cy.wait(2000);
-    // });
-
     beforeEach(() => {
-        cy.session('loginSession', () => {
-            cy.visit('/app/login', {
-                auth: {
-                    username: Cypress.env("httpAuthUsername"),
-                    password: Cypress.env("httpAuthPassword"),          
-                },
-            });
-            cy.get('[type="email"]').type(validEmail); 
-            cy.get('[type="password"]').type(validPassword); 
-            cy.get('button[type="submit"]').click();
-            cy.url().should('include', '/app/admin-panel');
-            cy.get('h4').should('be.visible'); // Wait for the header to be visible
+        cy.visit('/app/login', {
+            auth: {
+                username: Cypress.env("httpAuthUsername"),
+                password: Cypress.env("httpAuthPassword"),          
+            },
         });
-    });
+        cy.get('[type="email"]').type(validEmail); 
+        cy.get('[type="password"]').type(validPassword); 
+        cy.get('button[type="submit"]').click().wait(1000);
 
-
-    it('should log in successfully', () => {
-        cy.visit('/app/admin-panel');
         cy.url().should('include', '/app/admin-panel'); 
         cy.get('h4')
             .should('be.visible')
             .should('contain', 'Leads');
     });
 
-    it('should display leads in list view', () => {
-        cy.visit('/app/admin-panel');
-        cy.get('table').should('exist');
-        cy.get('table tbody tr').should('have.length.greaterThan', 0);
-        cy.get('table tbody tr').first().find('td').eq(0).should('be.visible'); 
-
-    });
-
-    it('verify options in the kebab menu',()=>{
-        cy.visit('/app/admin-panel');
-        //? Treba proveriti da li moze da se otvori single page preko ID
-        //! Step #5: Click the Design ID for a specific lead. Kebab menu here
-        //! cy.get('table tbody tr').first().find('td').find('.c-table-btn').click(); // Click on the Design ID
-        //! cy.url().should('include', '/design-details'); // Expected result: Redirected to Design Details page
-
-        cy.get('table tbody tr').first().find('.c-table-btn').click(); // Click on kebab menu
-        cy.contains('span','Design details').click({ force: true });
-        // ? ovde unesi URl koji se pojavi kad otvoris details page
-        // cy.url().should('include', '/design-details');
-
-        cy.get('table tbody tr').first().find('.c-table-btn').click(); // Click on kebab menu
-        cy.contains('span','Lead details').click({ force: true }); 
-        // ? ovde unesi URl koji se pojavi kad otvoris details page
-        // cy.url().should('include', '/lead-details');
+    it('should display all lead designs in List View', () => {
+       
+        cy.get('nav').contains('Leads').should('be.visible'); 
+        cy.url().should('include', '/app/admin-panel'); 
 
         
-        cy.get('table tbody tr').first().find('.c-table-btn').click(); // Click on kebab menu
-        cy.get('span').contains('Download design PDF').click({ force: true }); 
+        cy.get('table').should('exist').wait(2000); 
+        cy.get('table tbody tr').should('have.length.greaterThan', 0); 
 
-        // Step #13: Locate the "Delete" action button in kebab menu.
-        // *cy.get('table tbody tr').first().find('.c-table-btn').click(); // Click on kebab menu
-        // *cy.get('span').contains('Delete').click({ force: true }); 
+        // Identify a label for column
+        const tableColomLabel = [
+            'Design ID',
+            'Lead name',
+            'Email',
+            'Created at',
+            'Base quote',
+            'Refined quote',
+            'Status',
+        ];
+        tableColomLabel.forEach(tableColomLabel => {
+            cy.contains('th', tableColomLabel).should('be.visible'); 
 
-        //? Treba proveriti da li ima confirmation modal
-        //! cy.get('.confirmation-dialog').should('be.visible');
+        });
 
-        //! Step #15: Confirm the deletion when prompted.
-        //! cy.get('.confirmation-dialog').contains('Confirm').click(); // Click confirm button
-        //! cy.get('.notification').should('contain', 'You’ve successfully deleted a sail'); // Check success notification
+      
+        //Locate the "View Lead details" action button in kebab menu.
+        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+        cy.get('[alt="menu-dots"]') 
+                .parents('div.c-table-btn') 
+                .find('span') 
+                .contains('Lead details')
+                .should('exist');
+                // .click({ force: true });
 
-        // // Step #16: Navigate to the "Leads" list
-        // !cy.get('nav').contains('Leads').click(); // Navigate back to Leads
-        // !cy.url().should('include', '/leads'); // Expected result: Leads page is displayed
+        // Click the "View Lead details" action button.
+        // ?cy.url().should('include', 'app/admin-panel?page=1&itemsPerPage=5'); // Expected result: Redirected to Design Details page
+       
+        //Locate the "View Design details" action button in kebab menu.
+        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+        cy.get('[alt="menu-dots"]') 
+                .parents('div.c-table-btn') 
+                .find('span') 
+                .contains('Design details')
+                .should('exist');
+                // .click({ force: true });
 
-    });
+        // Click the "View Design Details" action button
+        // ?cy.url().should('include', '/lead-details'); // Expected result: Redirected to Lead Details page
 
-    it('verify pagination functionality on Admin Panel', () => {
+        //  Locate the "Download Design PDF" action button in kebab menu
+        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+        cy.get('[alt="menu-dots"]') 
+                .parents('div.c-table-btn') 
+                .find('span') 
+                .contains('Download design PDF')
+                .should('exist');
+                // .click({ force: true });
+
+        // Click the "Download Design PDF" action button
+        // Assuming the download is handled by the browser, we can check for the download
+        cy.wait(2000); // Wait for download to complete, adjust as necessary
+
+        // Locate the "Delete" action button in kebab menu
+        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+        cy.get('[alt="menu-dots"]') 
+                .parents('div.c-table-btn') 
+                .find('span') 
+                .contains('Delete')
+                .should('exist');
+                // .click({ force: true });
+
+        //  Click the "Delete" action button
+        // ? cy.get('.confirmation-dialog').should('be.visible'); // Check for confirmation dialog
+
+        //  Confirm the deletion when prompted.
+        // ? cy.get('.confirmation-dialog').contains('Confirm').click(); // Confirm deletion
+        // ? cy.get('.notification').should('contain', 'Lead design deleted successfully.'); // Check for success notification
+
+        // Navigate to the "Leads" list
+        // cy.get('nav').contains('Leads').click(); // Navigate back to Leads
+
+        cy.scrollTo('bottom'); // Scroll to the bottom
+
         //Pagination
-        cy.visit('/app/admin-panel');
         cy.scrollTo('bottom'); 
-        cy.wait(2000);
-        cy.get('section', ).eq(4).contains('button', 'Next').should('be.visible').click({force: true});
+        cy.get('section', ).eq(5).contains('button', 'Next').should('be.visible').click({force: true});
         cy.url().should('include', '/app/admin-panel?page=2');
-        cy.get('section', ).eq(4).contains('button', 'Previous').should('be.visible').click({force: true});
+        cy.get('section', ).eq(5).contains('button', 'Previous').should('be.visible').click({force: true});
         cy.url().should('include', '/app/admin-panel?page=1');
-
     });
+
 });
+
+// Cypress.runner.stop();

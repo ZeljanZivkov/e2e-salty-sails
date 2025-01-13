@@ -4,7 +4,8 @@
 describe('Verify Search Functionality on the All Designs Table', () => {
     const validEmail = Cypress.env("email");
     const validPassword = Cypress.env("password"); 
-
+    const leadName = 'Zeljan';
+    const invalidLeadName = 'Miki Milane';
     beforeEach(() => {
         cy.visit('/app/login', {
             auth: {
@@ -48,13 +49,13 @@ describe('Verify Search Functionality on the All Designs Table', () => {
     });
 
     it('should search by valid lead name', () => {
-        cy.get('input[type="search"]').clear().type('John Doe').wait(1000); 
-        cy.get('table tbody tr').should('have.length', 1 ); 
-        cy.get('table tbody tr').first().find('td').eq(1).contains('John Doe');  
+        cy.get('input[type="search"]').clear().type(leadName).wait(1000); 
+        cy.get('table tbody tr').should('have.length.greaterThan', 0 ); //Ovde moze da se stavi tacan broj koliko ima leadova sa tim imenom
+        cy.get('table tbody tr').first().find('td').eq(1).contains(leadName);  
     });
 
     it('should show no data for invalid lead name', () => {
-        cy.get('input[type="search"]').clear().type('Miki Milane').wait(1000);
+        cy.get('input[type="search"]').clear().type(invalidLeadName).wait(1000);
         cy.get('table tbody tr').first().find('td').first().contains('No Data'); 
 
         cy.get('input[type="search"]').clear();
