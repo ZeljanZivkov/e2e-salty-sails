@@ -51,4 +51,22 @@ describe('Admin Panel Login', () => {
         cy.url().should('include', '/app/login'); 
 
     });
+//logout
+    it('should log out successfully', () => {
+        cy.get('[type="email"]').type(validEmail); 
+        cy.get('[type="password"]').type(validPassword); 
+        cy.get('button[type="submit"]').click(); 
+
+        cy.url().should('include', '/app/admin-panel'); 
+        cy.get('h4')
+            .should('be.visible')
+            .should('contain', 'Leads');
+
+        cy.get('[alt="caret-down"]').eq(0).click({force: true});    
+        cy.get('.undefined') 
+            .contains('Logout')
+            .click({ force: true });
+
+        cy.url().should('include', '/app/login'); 
+    });
 });
