@@ -30,7 +30,7 @@ describe('Verify Editing Lead Details', () => {
         //fali mi url ovde koj ide posle klika na lead details
         // ?cy.url().should('include', 'app/admin-panel?page=1&itemsPerPage=5'); 
     });
-
+    //should edit basic info
     it('should edit basic info successfully', () => {
                  
         cy.get('.undefined') 
@@ -63,7 +63,7 @@ describe('Verify Editing Lead Details', () => {
                 .click();       
         cy.get('button[type="submit"]').contains('Save').click();
     });
-    
+    //no changes have been saved after canceling edit Base info
     it('no changes have been saved after canceling edit Base info', () => {
 
         cy.get('.undefined') 
@@ -92,7 +92,7 @@ describe('Verify Editing Lead Details', () => {
                 .contains('Phone')
                 .should('not.contain', '0987654321');
     });
-
+    //should edit Preferred communication info
     it('should edit Preferred communication info successfully', () => {
 
         cy.get('.undefined') 
@@ -121,7 +121,7 @@ describe('Verify Editing Lead Details', () => {
             });
         cy.get('button[type="submit"]').contains('Save').click()
     });
-
+    //should edit Best contact time
     it('should edit Best contact time info successfully', () => {
         cy.get('.undefined') 
                 .find('span') 
@@ -143,12 +143,11 @@ describe('Verify Editing Lead Details', () => {
                     cy.get('#time').contains(daysOfweek).should('be.visible');
                 });
 
-                const preferedTime = [
-                    'Morning (7AM - 10AM)',
-                    'Early afternoon (11AM - 2PM)',
-                    'Late afternoon (3PM - 6PM)'
+            const preferedTime = [
+                'Morning (7AM - 10AM)',
+                'Early afternoon (11AM - 2PM)',
+                'Late afternoon (3PM - 6PM)'
                 ];
-                  
                 cy.get('input[name="preferredTime"]').each(($el, index) => {
                     cy.wrap($el).should('have.value', preferedTime[index]);
                 });
