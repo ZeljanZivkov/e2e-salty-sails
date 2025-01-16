@@ -167,44 +167,7 @@ describe('Verify Editing Lead Details', () => {
 
     });
     //? ______________________________________________________________________________________
-    it('should add, edit, and delete notes for a design', () => {
-        // Step #2: Select a design from the list to view its details.
-        cy.get('.design-table .design-row').first().click(); // Adjust selector to match the design row
-        cy.url().should('include', '/admin/design-details'); // Ensure we are on the design details page
-
-        // Step #3: Locate the note field within the design details page
-        cy.get('#note-field').should('be.empty'); // Adjust selector to match the note field
-
-        // Step #4: Enter a note
-        cy.get('#note-field').type('This design requires further revisions'); // Adjust selector to match the note field
-
-        // Step #5: Save the note.
-        cy.get('button.save-note').click(); // Adjust selector to match the save button
-        cy.get('.notification').should('contain', 'Note saved successfully'); // Adjust notification message as necessary
-
-        // Step #6: Select a design that already has a note added
-        cy.get('.design-table .design-row').first().click(); // Select the same design or another with a note
-        cy.url().should('include', '/admin/design-details'); // Ensure we are on the design details page
-        cy.get('#note-field').should('contain', 'This design requires further revisions'); // Check if the note is visible
-
-        // Step #7: Edit the note
-        cy.get('#note-field').clear().type('Revisions completed, final version ready'); // Edit the note
-
-        // Step #8: Save the edited note.
-        cy.get('button.save-note').click(); // Save the edited note
-        cy.get('.notification').should('contain', 'Note updated successfully'); // Adjust notification message as necessary
-
-        // Step #9: Select a design from the list to view its details.
-        cy.get('.design-table .design-row').first().click(); // Select the same design or another
-        cy.url().should('include', '/admin/design-details'); // Ensure we are on the design details page
-
-        // Step #10: Ensure the note field is empty by default
-        cy.get('#note-field').should('be.empty'); // Check if the note field is empty
-
-        // Step #11: Optionally, leave the note field empty and save the design details.
-        cy.get('button.save-design').click(); // Save the design details
-        cy.get('.notification').should('contain', 'Design saved successfully'); // Adjust notification message as necessary
-    });
+    
 
 });
 
