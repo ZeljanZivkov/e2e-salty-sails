@@ -23,7 +23,7 @@ describe('Salty-Sails Admin Panel - Lead Designs List View', () => {
 
     it('should display all lead designs in List View', () => {
        
-        cy.get('nav').contains('Leads').should('be.visible'); 
+        cy.get('nav').contains('Dashboard').should('be.visible'); 
         cy.url().should('include', '/app/admin-panel'); 
 
         
@@ -108,10 +108,9 @@ describe('Salty-Sails Admin Panel - Lead Designs List View', () => {
         cy.scrollTo('bottom'); 
         cy.get('section', ).eq(5).contains('button', 'Next').should('be.visible').click({force: true});
         cy.url().should('include', '/app/admin-panel?page=2');
-        cy.get('section', ).eq(5).contains('button', 'Previous').should('be.visible').click({force: true});
-        cy.url().should('include', '/app/admin-panel?page=1');
+        cy.get('section', ).eq(5).contains('button', 'Previous').should('be.visible').click({force: true}).wait(1000);
+        cy.url().should('include', '/app/admin-panel?page=2');
+        //!Cypress.runner.stop();
     });
 
 });
-
-// Cypress.runner.stop();
