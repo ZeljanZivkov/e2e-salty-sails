@@ -24,7 +24,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
     });
 
     it('should display all supported statuses in the Status filter dropdown', () => {
-        cy.get('section', ).eq(1).find('button').click()
+        cy.get('section', ).eq(2).find('button').click()
         
         const expectedStatuses = [
             'Base quote sent',
@@ -44,7 +44,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
     
     it('should filter designs by a single status', () => {
         
-        cy.get('section', ).eq(1).find('button').click()
+        cy.get('section', ).eq(2).find('button').click()
         cy.get('.react-select__control').click();
         cy.get('.react-select__menu').contains(statusFilter).click();
         cy.get('button').contains('Apply filters').click().wait(2000);
@@ -53,13 +53,13 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
 
     it('should reset the status filter', () => {
 
-        cy.get('section', ).eq(1).find('button').click()
+        cy.get('section', ).eq(2).find('button').click()
         cy.get('.react-select__control').click();
         cy.get('.react-select__menu').contains(statusFilter).click();
         cy.get('section', ).eq(2).should('be.visible');
         cy.get('button').contains('Apply filters').click().wait(2000);
         cy.get('table').find('tr').should('have.length.greaterThan', 0).contains('Base Quote Sent').should('exist');
-        cy.get('section', ).eq(1).contains('span', 'Clear all filters').click();
+        cy.get('section', ).eq(2).contains('span', 'Clear all filters').click();
         cy.get('button').contains('Apply filters').should('be.hidden');
 
         // Cypress.runner.stop();
@@ -67,7 +67,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
 
     it('should display a date picker for the Date Range filter', () => {
         // Step #6: Locate the "Date Range" filter.
-        cy.get('section', ).eq(1).find('button').click()
+        cy.get('section', ).eq(2).find('button').click()
         cy.get(':nth-child(2) > label')
             .contains('Start date')
             .parent()
@@ -84,7 +84,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
 
     it('should filter designs by a specific start date ', () => {
 
-        cy.get('section', ).eq(1).find('button').click()
+        cy.get('section', ).eq(2).find('button').click()
         cy.get(':nth-child(2) > label')
             .contains('Start date')
             .parent()
@@ -101,7 +101,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
 
     it('should filter designs by a start and end date', () => {
 
-        cy.get('section', ).eq(1).find('button').click()
+        cy.get('section', ).eq(2).find('button').click()
         cy.get(':nth-child(2) > label')
             .contains('Start date')
             .parent()
@@ -126,7 +126,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
     });
     
     it('should apply a Start date  with a specific status', () => {
-        cy.get('section', ).eq(1).find('button').click()
+        cy.get('section', ).eq(2).find('button').click()
         cy.get(':nth-child(2) > label')
             .contains('Start date')
             .parent()
@@ -143,7 +143,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
     });
 
     it('should reset all filters', () => {
-        cy.get('section', ).eq(1).find('button').click()
+        cy.get('section', ).eq(2).find('button').click()
         cy.get(':nth-child(2) > label')
             .contains('Start date')
             .parent()
@@ -168,7 +168,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
         cy.get('button').contains('Apply filters').click().wait(1000);
 
         cy.get('table').find('tr').should('have.length.greaterThan', 0); 
-        cy.get('section', ).eq(1).contains('span', 'Clear all filters').click();
+        cy.get('section', ).eq(2).contains('span', 'Clear all filters').click();
         cy.get('button').contains('Apply filters').should('be.hidden');
     });
 
