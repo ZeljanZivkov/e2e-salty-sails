@@ -177,8 +177,7 @@ describe('Verify Editing Lead Details', () => {
         cy.get('textarea[name="note"]').should('be.visible'); // Check if the note field is visible
         cy.get('textarea[name="note"]').should('be.empty');
         //  Enter a note
-        cy.get('textarea[name="note"]').type('This client requires faster work execution.'); //i must have here clear because there is already a note, so i need to clear it first
-
+        cy.get('textarea[name="note"]').type('This client requires faster work execution.');
         // Step #5: Save the note.
         cy.get('button[type="button"]').contains('Save').click({force: true}); // Save the note
         
@@ -206,6 +205,59 @@ describe('Verify Editing Lead Details', () => {
                 .click({ force: true });
         cy.get('textarea[name="note"]').clear(); // Clear the note field
         cy.get('button[type="button"]').contains('Save').click(); // Save the empty note
+    });
+    it('should display all Designs in List View', () => {
+            
+            cy.get('table').should('exist').wait(2000); 
+            cy.get('table tbody tr').should('have.length.greaterThan', 0); 
+    
+            // Identify a label for column
+            const tableColomLabel = [
+                'Design ID',
+                'Design name',
+                'Created at',
+                'Base quote',
+                'Refined quote',
+                'Status',
+            ];
+            tableColomLabel.forEach(tableColomLabel => {
+                cy.contains('th', tableColomLabel).should('be.visible'); 
+    
+            });
+        
+            //Locate the "View Design details" action button in kebab menu.
+            cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+            cy.get('[alt="menu-dots"]') 
+                    .parents('div.c-table-btn') 
+                    .find('span') 
+                    .contains('Design details')
+                    .should('exist');
+                    // .click({ force: true });
+    
+            // Click the "View Design Details" action button
+            // ?cy.url().should('include', '/lead-details'); // Expected result: Redirected to Lead Details page
+    
+            //  Locate the "Download Design PDF" action button in kebab menu
+            cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+            cy.get('[alt="menu-dots"]') 
+                    .parents('div.c-table-btn') 
+                    .find('span') 
+                    .contains('Download design PDF')
+                    .should('exist');
+                    // .click({  
+            
+                // Locate the "Delete" action button in kebab menu
+            cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+            cy.get('[alt="menu-dots"]') 
+                    .parents('div.c-table-btn') 
+                    .find('span') 
+                    .contains('Delete')
+                    .should('exist');
+                    // .click({ force: true });
+
+            //  Click the "Delete" action button
+            // ? cy.get('.confirmation-dialog').should('be.visible'); // Check for confirmation dialog
+
     });
 });
 
