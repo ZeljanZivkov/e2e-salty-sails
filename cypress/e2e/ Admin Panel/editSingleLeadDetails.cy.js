@@ -166,8 +166,46 @@ describe('Verify Editing Lead Details', () => {
         cy.get('button[type="submit"]').contains('Save').click();
 
     });
-    //? ______________________________________________________________________________________
     
+    it('should add, edit, and empty notes for a Lead design', () => {
+        
+        cy.get('.undefined') 
+                .find('span') 
+                .contains('Edit notes')
+                .click({ force: true });
+                
+        cy.get('textarea[name="note"]').should('be.visible'); // Check if the note field is visible
+        cy.get('textarea[name="note"]').should('be.empty');
+        //  Enter a note
+        cy.get('textarea[name="note"]').type('This client requires faster work execution.'); //i must have here clear because there is already a note, so i need to clear it first
 
+        // Step #5: Save the note.
+        cy.get('button[type="button"]').contains('Save').click({force: true}); // Save the note
+        
+        //Notification
+        // cy.get('body').should('contain', 'You’ve successfully changed lead’s notes'); // 
+
+        // Step #6: Select a design that already has a note added
+        cy.get('textarea[name="note"]').should('contain', 'This client requires faster work execution.');
+
+        // Step #7: Edit the note
+        cy.get('.undefined') 
+                .find('span') 
+                .contains('Edit notes')
+                .click({ force: true });
+        cy.get('textarea[name="note"]').clear().type('Revisions completed, final version ready'); // Edit the note
+        cy.get('button[type="button"]').contains('Save').click();// Save the edited note
+
+        // Notification
+        // cy.get('.notification').should('contain', 'Note updated successfully'); 
+
+        // leave the note field empty and save the design details.
+        cy.get('.undefined') 
+                .find('span') 
+                .contains('Edit notes')
+                .click({ force: true });
+        cy.get('textarea[name="note"]').clear(); // Clear the note field
+        cy.get('button[type="button"]').contains('Save').click(); // Save the empty note
+    });
 });
 
