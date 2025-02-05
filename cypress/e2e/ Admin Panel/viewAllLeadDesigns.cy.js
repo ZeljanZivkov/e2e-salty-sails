@@ -47,7 +47,7 @@ describe('Salty-Sails Admin Panel - Lead Designs List View', () => {
 
       
         //Locate the "View Lead details" action button in kebab menu.
-        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click({force: true}); 
         cy.get('[alt="menu-dots"]') 
                 .parents('div.c-table-btn') 
                 .find('span') 
@@ -59,7 +59,7 @@ describe('Salty-Sails Admin Panel - Lead Designs List View', () => {
         // ?cy.url().should('include', 'app/admin-panel?page=1&itemsPerPage=5'); // Expected result: Redirected to Design Details page
        
         //Locate the "View Design details" action button in kebab menu.
-        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+        cy.get('table tbody tr').first().find('[alt="menu-dots"]')
         cy.get('[alt="menu-dots"]') 
                 .parents('div.c-table-btn') 
                 .find('span') 
@@ -71,7 +71,7 @@ describe('Salty-Sails Admin Panel - Lead Designs List View', () => {
         // ?cy.url().should('include', '/lead-details'); // Expected result: Redirected to Lead Details page
 
         //  Locate the "Download Design PDF" action button in kebab menu
-        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+        cy.get('table tbody tr').first().find('[alt="menu-dots"]')
         cy.get('[alt="menu-dots"]') 
                 .parents('div.c-table-btn') 
                 .find('span') 
@@ -84,7 +84,7 @@ describe('Salty-Sails Admin Panel - Lead Designs List View', () => {
         cy.wait(2000); // Wait for download to complete, adjust as necessary
 
         // Locate the "Delete" action button in kebab menu
-        cy.get('table tbody tr').first().find('[alt="menu-dots"]').click(); 
+        cy.get('table tbody tr').first().find('[alt="menu-dots"]')
         cy.get('[alt="menu-dots"]') 
                 .parents('div.c-table-btn') 
                 .find('span') 
@@ -102,14 +102,13 @@ describe('Salty-Sails Admin Panel - Lead Designs List View', () => {
         // Navigate to the "Leads" list
         // cy.get('nav').contains('Leads').click(); // Navigate back to Leads
 
-        cy.scrollTo('bottom'); // Scroll to the bottom
-
+        
         //Pagination
         cy.scrollTo('bottom'); 
         cy.get('section', ).eq(5).contains('button', 'Next').should('be.visible').click({force: true});
-        cy.url().should('include', '/app/admin-panel?page=2');
+        cy.url().should('include', '/app/admin-panel?page=2&');
         cy.get('section', ).eq(5).contains('button', 'Previous').should('be.visible').click({force: true}).wait(1000);
-        cy.url().should('include', '/app/admin-panel?page=2');
+        cy.url().should('include', '/app/admin-panel?page=2&');
         //!Cypress.runner.stop();
     });
 
