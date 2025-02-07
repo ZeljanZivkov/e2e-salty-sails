@@ -48,7 +48,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
         cy.get('.react-select__control').click();
         cy.get('.react-select__menu').contains(statusFilter).click();
         cy.get('button').contains('Apply filters').click().wait(2000);
-        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains('Base Quote Sent').should('exist'); 
+        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains(statusFilter).should('exist'); 
     });
 
     it('should reset the status filter', () => {
@@ -58,7 +58,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
         cy.get('.react-select__menu').contains(statusFilter).click();
         cy.get('section', ).eq(2).should('be.visible');
         cy.get('button').contains('Apply filters').click().wait(2000);
-        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains('Base Quote Sent').should('exist');
+        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains(statusFilter).should('exist');
         cy.get('section', ).eq(2).contains('span', 'Clear all filters').click();
         cy.get('button').contains('Apply filters').should('be.hidden');
 
@@ -139,7 +139,7 @@ describe('Verify Filtering Functionality on the All Designs Table', () => {
         cy.get('.react-select__control').click();
         cy.get('.react-select__menu').contains(statusFilter).click();
         cy.get('button').contains('Apply filters').click().wait(2000);
-        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains('Base Quote Sent').should('exist'); 
+        cy.get('table').find('tr').should('have.length.greaterThan', 0).contains(statusFilter).should('exist'); 
     });
 
     it('should reset all filters', () => {
